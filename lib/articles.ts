@@ -25,25 +25,25 @@ export async function getLimitedArticlesData(count: number = 10, page: number = 
   return filteredArticles;
 }
 
-export async function getAllArticleIds() {
-  const res = await fetch(new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/articles`));
-  const articles = await res.json();
-  return articles && articles.length > 0
-    ? articles.map((article) => {
-        return {
-          params: {
-            id: String(article.id),
-          },
-        };
-      })
-    : [];
-}
+// export async function getAllArticleIds() {
+//   const res = await fetch(new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/articles`));
+//   const articles = await res.json();
+//   return articles && articles.length > 0
+//     ? articles.map((article) => {
+//         return {
+//           params: {
+//             id: String(article.id),
+//           },
+//         };
+//       })
+//     : [];
+// }
 
-export async function getArticleData(id: string) {
-  const res = await fetch(new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/articles/${id}`));
-  const article = await res.json();
-  return article;
-}
+// export async function getArticleData(id: string) {
+//   const res = await fetch(new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/articles/${id}`));
+//   const article = await res.json();
+//   return article;
+// }
 
 // 今日以前の記事のみ取得
 function getArticlesBeforeToday(articles: ARTICLE[]) {
@@ -54,10 +54,5 @@ function getArticlesBeforeToday(articles: ARTICLE[]) {
 
 // 公開日順でソート
 function sortArticleByPublishedAt(articles: ARTICLE[]) {
-  return articles.sort(
-    (a, b) =>
-      new Date(String(b.published_at) === "0001-01-01T00:00:00Z" ? b.created_at : b.published_at).getTime() +
-      1000 * 60 * 60 * 24 -
-      (new Date(String(a.published_at) === "0001-01-01T00:00:00Z" ? a.created_at : a.published_at).getTime() + 1000 * 60 * 60 * 24)
-  );
+  return articles.sort((a, b) => new Date(String(b.published_at) === "0001-01-01T00:00:00Z" ? b.created_at : b.published_at).getTime() + 1000 * 60 * 60 * 24 - (new Date(String(a.published_at) === "0001-01-01T00:00:00Z" ? a.created_at : a.published_at).getTime() + 1000 * 60 * 60 * 24));
 }
